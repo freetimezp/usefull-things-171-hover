@@ -13,6 +13,7 @@ a {
 body {
     width: 100%;
     overflow-x: hidden;
+    overflow-y: auto;
     background-color: #e3e3db;
 }
 
@@ -41,8 +42,8 @@ p {
 section {
     position: relative;
     width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh; /* Use min-height instead of fixed height */
+    overflow: visible; /* or remove this if unnecessary */
 }
 
 .intro,
@@ -106,6 +107,7 @@ section {
     width: 30%;
     height: 30%;
     z-index: 2;
+    pointer-events: none; /* Prevents it from blocking scroll */
 }
 
 
