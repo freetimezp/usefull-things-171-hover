@@ -22,6 +22,7 @@ img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 30%;
     will-change: transform;
 }
 
@@ -42,8 +43,8 @@ p {
 section {
     position: relative;
     width: 100vw;
-    min-height: 100vh; /* Use min-height instead of fixed height */
-    overflow: visible; /* or remove this if unnecessary */
+    min-height: 100vh;
+    overflow: visible;
 }
 
 .intro,
@@ -107,27 +108,5 @@ section {
     width: 30%;
     height: 30%;
     z-index: 2;
-    pointer-events: none; /* Prevents it from blocking scroll */
+    pointer-events: none;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

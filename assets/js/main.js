@@ -2,12 +2,12 @@ import { awards } from "./data.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     const lenis = new Lenis({
-        autoRef: true
+        autoRef: true,
     });
 
     function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
+        lenis.raf(time);
+        requestAnimationFrame(raf);
     }
     requestAnimationFrame(raf);
 
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const POSITIONS = {
         BOTTOM: 0,
         MIDDLE: -80,
-        TOP: -160
+        TOP: -160,
     };
 
     let lastMousePosition = { x: 0, y: 0 };
@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let ticking = false;
     let mouseTimeout = null;
     let isMouseMoving = false;
-
 
     awards.forEach((award) => {
         const awardElement = document.createElement("div");
@@ -52,13 +51,12 @@ document.addEventListener("DOMContentLoaded", () => {
         awardsListContainer.appendChild(awardElement);
     });
 
-
     const awardsElements = document.querySelectorAll(".award");
 
     const animatePreview = () => {
         const awardsListRect = awardsList.getBoundingClientRect();
 
-        if(
+        if (
             lastMousePosition.x < awardsListRect.left ||
             lastMousePosition.x > awardsListRect.right ||
             lastMousePosition.y < awardsListRect.top ||
@@ -70,32 +68,31 @@ document.addEventListener("DOMContentLoaded", () => {
                     scale: 0,
                     duration: 0.4,
                     ease: "power2.out",
-                    onComplete: () => img.remove()
+                    onComplete: () => img.remove(),
                 });
             });
         }
     };
 
-
     const updateAwards = () => {
         animatePreview();
 
-        if(activeAward) {
+        if (activeAward) {
             const rect = activeAward.getBoundingClientRect();
-            const isStillOver = 
+            const isStillOver =
                 lastMousePosition.x >= rect.left &&
                 lastMousePosition.x <= rect.right &&
                 lastMousePosition.y >= rect.top &&
                 lastMousePosition.y <= rect.bottom;
 
-            if(!isStillOver) {
+            if (!isStillOver) {
                 const wrapper = activeAward.querySelector(".award-wrapper");
                 const leavingFromTop = lastMousePosition.y < rect.top + rect.height / 2;
 
                 gsap.to(wrapper, {
                     y: leavingFromTop ? POSITIONS.TOP : POSITIONS.BOTTOM,
                     duration: 0.4,
-                    ease: "power2.out"
+                    ease: "power2.out",
                 });
 
                 activeAward = null;
@@ -103,33 +100,31 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         awardsElements.forEach((award, index) => {
-            if(award === activeAward) return;
+            if (award === activeAward) return;
 
             const rect = award.getBoundingClientRect();
-            const isMouseOver = 
+            const isMouseOver =
                 lastMousePosition.x >= rect.left &&
                 lastMousePosition.x <= rect.right &&
                 lastMousePosition.y >= rect.top &&
                 lastMousePosition.y <= rect.bottom;
 
-            if(isMouseOver) {
+            if (isMouseOver) {
                 const wrapper = award.querySelector(".award-wrapper");
                 const enterFromTop = lastMousePosition.y < rect.top + rect.height / 2;
 
                 gsap.to(wrapper, {
                     y: POSITIONS.MIDDLE,
                     duration: 0.4,
-                    ease: "power2.out"
+                    ease: "power2.out",
                 });
 
                 activeAward = award;
             }
         });
 
-
         ticking = false;
     };
-
 
     document.addEventListener("mousemove", (e) => {
         lastMousePosition.x = e.clientX;
@@ -137,33 +132,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
         isMouseMoving = true;
 
-        if(mouseTimeout) {
+        if (mouseTimeout) {
             clearTimeout(mouseTimeout);
         }
 
         const awardsListRect = awardsList.getBoundingClientRect();
         const isInsideAwardsList =
-          lastMousePosition.x >= awardsListRect.left &&
-          lastMousePosition.x <= awardsListRect.right &&
-          lastMousePosition.y >= awardsListRect.top &&
-          lastMousePosition.y <= awardsListRect.bottom;
+            lastMousePosition.x >= awardsListRect.left &&
+            lastMousePosition.x <= awardsListRect.right &&
+            lastMousePosition.y >= awardsListRect.top &&
+            lastMousePosition.y <= awardsListRect.bottom;
 
-        if(isInsideAwardsList) {
+        if (isInsideAwardsList) {
             mouseTimeout = setTimeout(() => {
                 isMouseMoving = false;
 
                 const images = awardPreview.querySelectorAll("img");
 
-                if(images.length > 1) {
+                if (images.length > 1) {
                     const lastImage = images[images.length - 1];
 
                     images.forEach((img) => {
-                        if(img !== lastImage) {
+                        if (img !== lastImage) {
                             gsap.to(img, {
                                 scale: 0,
                                 duration: 0.4,
                                 ease: "power2.out",
-                                onComplete: () => img.remove()
+                                onComplete: () => img.remove(),
                             });
                         }
                     });
@@ -174,16 +169,19 @@ document.addEventListener("DOMContentLoaded", () => {
         animatePreview();
     });
 
+    document.addEventListener(
+        "scroll",
+        () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    updateAwards();
+                });
 
-    document.addEventListener("scroll", () => {
-        if(!ticking) {
-            requestAnimationFrame(() => {
-                updateAwards();
-            });
-
-            ticking = true;
-        }
-    }, { passive: true });
+                ticking = true;
+            }
+        },
+        { passive: true }
+    );
 
     awardsElements.forEach((award, index) => {
         const wrapper = award.querySelector(".award-wrapper");
@@ -194,13 +192,13 @@ document.addEventListener("DOMContentLoaded", () => {
             const rect = award.getBoundingClientRect();
             const enterFromTop = e.clientY < rect.top + rect.height / 2;
 
-            if(enterFromTop || currentPosition === POSITIONS.BOTTOM) {
+            if (enterFromTop || currentPosition === POSITIONS.BOTTOM) {
                 currentPosition = POSITIONS.MIDDLE;
 
                 gsap.to(wrapper, {
                     y: POSITIONS.MIDDLE,
                     duration: 0.4,
-                    ease: "power2.out"
+                    ease: "power2.out",
                 });
             }
 
@@ -218,7 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
             gsap.to(img, {
                 scale: 1,
                 duration: 0.4,
-                ease: "power2.out"
+                ease: "power2.out",
             });
         });
 
@@ -232,41 +230,8 @@ document.addEventListener("DOMContentLoaded", () => {
             gsap.to(wrapper, {
                 y: currentPosition,
                 duration: 0.4,
-                ease: "power2.out"
+                ease: "power2.out",
             });
         });
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
